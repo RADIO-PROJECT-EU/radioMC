@@ -1,0 +1,10 @@
+{
+  "version":"00",
+  "rooms":[
+    {"type":"other", "icon":"fa-key"},
+    {"type":"gym", "icon":"fa-futbol-o"},
+    {"type":"cafeteria", "icon":"fa-coffee"},
+    {"type":"myroom", "icon":"fa-bed"},
+    {"type":"commonroom", "icon":"fa-users"}
+  ]
+}

@@ -53,13 +53,7 @@ public class DelKnownLocationService {
 
         try {
             System.out.println(sb1.toString());
-            JSONObject current_rooms;
-            if(found){
-                current_rooms = new JSONObject(sb1.toString());
-            }
-            else{
-                current_rooms = new JSONObject();
-            }
+            JSONObject current_rooms = new JSONObject(sb1.toString());
 
             StringBuilder sb2 = new StringBuilder();
             BufferedReader in = new BufferedReader(new InputStreamReader(indata));
@@ -70,59 +64,59 @@ public class DelKnownLocationService {
             JSONObject removed_rooms = new JSONObject(sb2.toString());
 
 
-
             JSONArray ja = current_rooms.getJSONArray("rooms");
             JSONArray ja2 = removed_rooms.getJSONArray("ids");
+            found = false; //now we use found for ids instead of the file.
+
             if (ja2 != null) {
-                for (int i=0;i<ja2.length();i++)
-                {
+                for (int i = 0; i < ja2.length(); i++) {
                     int temp = ja2.getJSONObject(i).getInt("id");
                     if (ja != null) {
                         int k = 0;
                         while (true) {
-                            if(temp == ja.getJSONObject(k).getInt("id")){
-                                System.out.println("ja2"+temp);
-                                System.out.println("ja"+ja.getJSONObject(k).getInt("id"));
-                                ja.remove(k);
-                            }
-                            else{
-                                k++;
-                            }
-                            if(k >= ja.length()){
-                                break;
+                            if (ja.length() > 0){
+                                if (temp == ja.getJSONObject(k).getInt("id")) {
+                                    found = true;
+                                    ja.remove(k);
+                                } else {
+                                    k++;
+                                }
+                                if (k >= ja.length()) {
+                                    break;
+                                }
                             }
                         }
                     }
                 }
             }
-            JSONObject new_rooms = new JSONObject();
-            new_rooms.put("rooms", ja);
-            new_rooms.put("version", current_rooms.get("version"));
+            if (found){
+                JSONObject new_rooms = new JSONObject();
+                new_rooms.put("rooms", ja);
+                new_rooms.put("version", current_rooms.get("version"));
 
 
-
-
-            String current_rooms_string = new_rooms.toString();
-            //Let's make the output file a bit easier to read
-            current_rooms_string = current_rooms_string.replace("},","},\n");
-            current_rooms_string = current_rooms_string.replace("[","\n[\n");
-            current_rooms_string = current_rooms_string.replace("]","\n]\n");
-            current_rooms_string = current_rooms_string.replace(",",", ");
-            java.nio.file.Path file = Paths.get(this.getClass().getClassLoader().getResource(".").toString().replace("file:","")+"rooms.json");
-            List<String> lines = new ArrayList<String>();
-            String l[] = current_rooms_string.split("\n");
-            for(String i: l) {
-                lines.add(i);
+                String current_rooms_string = new_rooms.toString();
+                //Let's make the output file a bit easier to read
+                current_rooms_string = current_rooms_string.replace("},", "},\n");
+                current_rooms_string = current_rooms_string.replace("[", "\n[\n");
+                current_rooms_string = current_rooms_string.replace("]", "\n]\n");
+                current_rooms_string = current_rooms_string.replace(",", ", ");
+                java.nio.file.Path file = Paths.get(this.getClass().getClassLoader().getResource(".").toString().replace("file:", "") + "rooms.json");
+                List<String> lines = new ArrayList<String>();
+                String l[] = current_rooms_string.split("\n");
+                for (String i : l) {
+                    lines.add(i);
+                }
+                Files.write(file, lines, Charset.forName("UTF-8"));
+                System.out.println(current_rooms_string);
             }
-            Files.write(file, lines, Charset.forName("UTF-8"));
-            System.out.println(current_rooms_string);
 
             return Response.status(200).build();
         }
         catch (Exception e) {
             e.printStackTrace();
 
-            return Response.status(500).build();
+            return Response.status(500).entity(e.getStackTrace()).build();
         }
 
     }

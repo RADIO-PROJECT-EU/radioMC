@@ -23,7 +23,7 @@
     <dependency>
       <groupId>net.minidev</groupId>
       <artifactId>json-smart</artifactId>
-      <version>1.0.9</version>
+      <version>2.2.1</version>
     </dependency>
     <dependency>
       <groupId>org.json</groupId>
@@ -63,7 +63,7 @@
   </properties>
 
   <build>
-    <finalName>newjersey</finalName>
+    <finalName>radioMC</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.tomcat.maven</groupId>

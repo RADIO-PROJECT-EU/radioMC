@@ -22,20 +22,20 @@ public class GetKnownLocationsService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRooms() throws JSONException {
-
-        InputStream is = this.getClass().getResourceAsStream("/rooms.json");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder out = new StringBuilder();
-        String line;
         try {
+            InputStream is = this.getClass().getResourceAsStream("/rooms.json");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            StringBuilder out = new StringBuilder();
+            String line;
             while ((line = reader.readLine()) != null) {
                 out.append(line);
             }
-        reader.close();
-        } catch (IOException e) {
+            reader.close();
+            String result = out.toString();
+            return Response.status(200).entity(result).build();
+        } catch (Exception e) {
             e.printStackTrace();
+            return Response.status(500).entity(e.getStackTrace()).build();
         }
-        String result = out.toString();
-        return Response.status(200).entity(result).build();
     }
 }

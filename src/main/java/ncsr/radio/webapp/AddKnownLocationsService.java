@@ -1,7 +1,6 @@
 package ncsr.radio.webapp;
 
 import net.minidev.json.parser.JSONParser;
-import net.minidev.json.parser.ParseException;
 import org.json.JSONObject;
 
 import javax.ws.rs.Consumes;
@@ -60,6 +59,7 @@ public class AddKnownLocationsService {
 
             StringBuilder sb2 = new StringBuilder();
             BufferedReader in = new BufferedReader(new InputStreamReader(indata));
+            line = null;
             while ((line = in.readLine()) != null) {
                 sb2.append(line);
             }
@@ -93,7 +93,7 @@ public class AddKnownLocationsService {
         catch (Exception e) {
             e.printStackTrace();
 
-            return Response.status(500).build();
+            return Response.status(500).entity(e.getStackTrace()).build();
         }
     }
 

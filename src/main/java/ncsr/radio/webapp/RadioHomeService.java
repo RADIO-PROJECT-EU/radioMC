@@ -21,6 +21,8 @@ public class RadioHomeService {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response homeAction(InputStream indata) {
 
+        String response = "";
+
         try {
             StringBuilder sb2 = new StringBuilder();
             BufferedReader in = new BufferedReader(new InputStreamReader(indata));
@@ -63,12 +65,18 @@ public class RadioHomeService {
                     for (int i = 0; i < ja.length(); i++) {
                         if(action.getJSONObject("location").getInt("id") == ja.getJSONObject(i).getInt("id")){
                             gotoRobot(ja.getJSONObject(i).getDouble("x"),ja.getJSONObject(i).getDouble("y"));
+                            //TODO get response from robot here
+                            //response = ...
+                            //temp response below
+                            response = "The robot is coming to take you to "+ja.getJSONObject(i).getString("name")+"!<br>Please wait!";
                             break;
                         }
                     }
                 }
                 else{
                     gotoRobot(action.getJSONObject("location").getDouble("x"),action.getJSONObject("location").getDouble("y"));
+                    //TODO get response from robot here
+                    //response = ...
                 }
             }
 
@@ -77,7 +85,7 @@ public class RadioHomeService {
             e.printStackTrace();
         }
 
-        return null;
+        return Response.status(200).entity("{\"response\":\""+response+"\"}").build();
 
     }
 

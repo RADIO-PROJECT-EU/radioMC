@@ -33,7 +33,8 @@ public class GetKnownLocationsService {
             reader.close();
             String result = out.toString();
             return Response.status(200).entity(result).build();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
             return Response.status(500).entity(e.getStackTrace()).build();
         }

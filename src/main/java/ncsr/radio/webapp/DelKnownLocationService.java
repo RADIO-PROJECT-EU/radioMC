@@ -43,7 +43,8 @@ public class DelKnownLocationService {
                     sb1.append(line);
                 }
                 reader.close();
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
         }

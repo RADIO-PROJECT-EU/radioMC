@@ -1,5 +1,10 @@
 package ncsr.radio.webapp;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -61,27 +66,32 @@ public class RadioHomeService {
                     }
 
                     JSONObject current_rooms = new JSONObject(sb1.toString());
+
                     JSONArray ja = current_rooms.getJSONArray("rooms");
+
                     for (int i = 0; i < ja.length(); i++) {
                         if(action.getJSONObject("location").getInt("id") == ja.getJSONObject(i).getInt("id")){
-                            gotoRobot(ja.getJSONObject(i).getDouble("x"),ja.getJSONObject(i).getDouble("y"));
+                            gotoRobot(ja.getJSONObject(i).getDouble("x"),ja.getJSONObject(i).getDouble("y"), ja.getJSONObject(i).getDouble("theta"));
                             //TODO get response from robot here
                             //response = ...
                             //temp response below
                             response = "The robot is coming to take you to "+ja.getJSONObject(i).getString("name")+"!<br>Please wait!";
+                            //response = "The robot is busy!<button class='notification-button'>Please notify your caregiver!</button>";
+                            //response = "Already in this room!<button class='notification-button'>Please select another room!</button>";
                             break;
                         }
                     }
                 }
                 else{
-                    gotoRobot(action.getJSONObject("location").getDouble("x"),action.getJSONObject("location").getDouble("y"));
+                    gotoRobot(action.getJSONObject("location").getDouble("x"),action.getJSONObject("location").getDouble("y"),action.getJSONObject("location").getDouble("theta"));
                     //TODO get response from robot here
                     //response = ...
                 }
             }
 
 
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -89,8 +99,28 @@ public class RadioHomeService {
 
     }
 
-    private void gotoRobot(double x, double y){
+    private void gotoRobot(double x, double y, double theta){
         //TODO code to send robot to x,y
+        /*HttpClient httpClient = HttpClientBuilder.create().build();
+        JSONObject json = new JSONObject();
+        json.put("action_type", "goto");
+        JSONObject j2 = new JSONObject();
+        j2.put("x",x);
+        j2.put("y",y);
+        j2.put("theta",theta);
+        json.put("location",j2);
+        try {
+            HttpPost request = new HttpPost("http://172.17.20.125:8081/radio_action_manager_node/action");
+            StringEntity params =new StringEntity(json.toString());
+            request.addHeader("content-type", "application/json");
+            request.setEntity(params);
+            HttpResponse response = httpClient.execute(request);
+
+            // handle response here...
+        }
+        catch (Exception ex) {
+            // handle exception here
+        }*/
         System.out.println("Robot is heading to "+x+","+y);
     }
 

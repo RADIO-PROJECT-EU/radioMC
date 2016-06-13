@@ -112,12 +112,12 @@ public class DelKnownLocationService {
                 System.out.println(current_rooms_string);
             }
 
-            return Response.status(200).build();
+            return Response.status(200).type("application/json;charset=utf-8").build();
         }
         catch (Exception e) {
             e.printStackTrace();
 
-            return Response.status(500).entity(e.getStackTrace()).build();
+            return Response.status(500).type("text/plain;charset=utf-8").entity(e.getStackTrace()).build();
         }
 
     }

@@ -32,11 +32,11 @@ public class GetKnownLocationsService {
             }
             reader.close();
             String result = out.toString();
-            return Response.status(200).entity(result).build();
+            return Response.status(200).type("application/json;charset=utf-8").entity(result).build();
         }
         catch (Exception e) {
             e.printStackTrace();
-            return Response.status(500).entity(e.getStackTrace()).build();
+            return Response.status(500).type("text/plain;charset=utf-8").entity(e.getStackTrace()).build();
         }
     }
 }

@@ -46,24 +46,24 @@ public class RadioHomeService {
                     boolean found = false;
                     line = null;
                     StringBuilder sb1 = new StringBuilder();
-                    if(f.exists() && !f.isDirectory()) {
+                    /*if(f.exists() && !f.isDirectory()) {
                         if(f.length() > 0) {
                             found = true;
-                        }
-                        InputStream is = this.getClass().getResourceAsStream("/rooms.json");
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                        }*/
                         try {
+                            InputStream is = this.getClass().getResourceAsStream("/rooms.json");
+                            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
                             while ((line = reader.readLine()) != null) {
                                 sb1.append(line);
                             }
                             reader.close();
-                        } catch (IOException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
-                    }
+                    /*}
                     if (!found) {
                         return Response.status(404).build();
-                    }
+                    }*/
 
                     JSONObject current_rooms = new JSONObject(sb1.toString());
 
@@ -75,7 +75,7 @@ public class RadioHomeService {
                             //TODO get response from robot here
                             //response = ...
                             //temp response below
-                            response = "The robot is coming to take you to "+ja.getJSONObject(i).getString("name")+"!<br>Please wait!";
+                            response = "The robot is coming to take you to "+ja.getJSONObject(i).getString("name")+"!<br>Please wait!!";
                             //response = "The robot is busy!<button class='notification-button'>Please notify your caregiver!</button>";
                             //response = "Already in this room!<button class='notification-button'>Please select another room!</button>";
                             break;
@@ -95,13 +95,13 @@ public class RadioHomeService {
             e.printStackTrace();
         }
 
-        return Response.status(200).entity("{\"response\":\""+response+"\"}").build();
+        return Response.status(200).type("application/json;charset=utf-8").entity("{\"response\":\""+response+"\"}").build();
 
     }
 
     private void gotoRobot(double x, double y, double theta){
         //TODO code to send robot to x,y
-        /*HttpClient httpClient = HttpClientBuilder.create().build();
+        HttpClient httpClient = HttpClientBuilder.create().build();
         JSONObject json = new JSONObject();
         json.put("action_type", "goto");
         JSONObject j2 = new JSONObject();
@@ -110,8 +110,8 @@ public class RadioHomeService {
         j2.put("theta",theta);
         json.put("location",j2);
         try {
-            HttpPost request = new HttpPost("http://172.17.20.125:8081/radio_action_manager_node/action");
-            StringEntity params =new StringEntity(json.toString());
+            HttpPost request = new HttpPost("http://localhost:8081/radio_action_manager_node/action");
+            StringEntity params = new StringEntity(json.toString());
             request.addHeader("content-type", "application/json");
             request.setEntity(params);
             HttpResponse response = httpClient.execute(request);
@@ -120,7 +120,7 @@ public class RadioHomeService {
         }
         catch (Exception ex) {
             // handle exception here
-        }*/
+        }
         System.out.println("Robot is heading to "+x+","+y);
     }
 
